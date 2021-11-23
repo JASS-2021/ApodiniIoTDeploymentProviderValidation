@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  # Apodini Test Web Service
+  apodini-test-web-service:
+    container_name: "test"
+    image: "hendesi/master-thesis:latest-arm64"
+    # Expose port 8080 of container on port 443 of host
+    ports:
+      - "8080:8080"
+    privileged: true
+    user: root
+    volumes:
+      - ${ENV_DEPLOYPATH}:/app/tmp:Z
+    command: ${ENV_COMMAND}
+    
+    # Test if mounting works with deployment provider

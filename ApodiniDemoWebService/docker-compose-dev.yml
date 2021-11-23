@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  # Apodini Test Web Service
+  apodini-test-web-service:
+    container_name: "test-web-service"
+    image: "hendesi/master-thesis:latest-arm64"
+    build:
+        contxt: ./
+        dockerfile: ./WebService/Dockerfile
+    # Expose port 8080 of container on port 443 of host
+    ports:
+      - "80:80"
+    # Test if mounting works with deployment provider
+    volumes:
+      - ../WebService:/app
