@@ -6,6 +6,8 @@ The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C),
  - 2 LIFX lamps are to Pi A
  - 1 LIFX lamp are to Pi B 
  - 1 DuckieBot with Pi C (a DuckieBot consists of a Raspberry Pi: Pi C refers to this pi)
+ 
+ The web service that was used for the evaluation/deployment is the [ApodiniDemoWebService](https://github.com/Apodini/ApodiniDemoWebService).
 
 ### General Setup
 
