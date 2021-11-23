@@ -13,7 +13,16 @@ let package = Package(
         .executable(
             name: "LifxDuckieIoTDeploymentTarget",
             targets: ["LifxDuckieIoTDeploymentTarget"]
+        ),
+        .library(
+            name: "LifxIoTDeploymentOption",
+            targets: ["LifxIoTDeploymentOption"]
+        ),
+        .library(
+            name: "DuckieIoTDeploymentOption",
+            targets: ["DuckieIoTDeploymentOption"]
         )
+        
     ],
     dependencies: [
         .package(name: "ApodiniIoTDeploymentProvider", url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git", .branch("develop")),
@@ -31,20 +40,17 @@ let package = Package(
                 .target(name: "DuckiePostDiscoveryAction"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "SwiftDeviceDiscovery", package: "swift-device-discovery")
-//                .product(name: "LifxDiscoveryActions", package: "swift-nio-lifx-impl")
             ]
         ),
         .target(
             name: "LifxIoTDeploymentOption",
             dependencies: [
-//                .product(name: "ApodiniDeployBuildSupport", package: "Apodini"),
                 .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
         .target(
             name: "DuckieIoTDeploymentOption",
             dependencies: [
-//                .product(name: "ApodiniDeployBuildSupport", package: "Apodini"),
                 .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
