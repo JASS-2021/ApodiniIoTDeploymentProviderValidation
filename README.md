@@ -1,4 +1,4 @@
-# ApodiniIoTDeploymentProviderValidation
+# Jass Deployment Provider - Evaluation
 
 ## Setup
 The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C), to which are 3 LIFX lamps and 1 DuckieBot connected such that:
