@@ -21,12 +21,15 @@ let package = Package(
         .library(
             name: "DuckieIoTDeploymentOption",
             targets: ["DuckieIoTDeploymentOption"]
+        ),
+        .executable(
+            name: "DemoWebService",
+            targets: ["WebService"]
         )
-        
     ],
     dependencies: [
-        .package(name: "ApodiniIoTDeploymentProvider", url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git", .branch("develop")),
-        .package(name: "swift-device-discovery", url: "https://github.com/Apodini/SwiftDeviceDiscovery.git", .branch("master")),
+        .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.6.1")),
+        .package(name: "ApodiniIoTDeploymentProvider", url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git", .upToNextMinor(from: "0.1.0")),
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
@@ -38,8 +41,7 @@ let package = Package(
                 .target(name: "LifxIoTDeploymentOption"),
                 .target(name: "DuckieIoTDeploymentOption"),
                 .target(name: "DuckiePostDiscoveryAction"),
-                .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "SwiftDeviceDiscovery", package: "swift-device-discovery")
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]
         ),
         .target(
@@ -57,8 +59,20 @@ let package = Package(
         .target(
             name: "DuckiePostDiscoveryAction",
             dependencies: [
-                .product(name: "SwiftDeviceDiscovery", package: "swift-device-discovery")
+                .product(name: "DeploymentTargetIoT", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
+        .executableTarget(
+            name: "WebService",
+            dependencies: [
+                .product(name: "Apodini", package: "Apodini"),
+                .product(name: "ApodiniREST", package: "Apodini"),
+                .product(name: "ApodiniOpenAPI", package: "Apodini"),
+                .product(name: "ApodiniDeploy", package: "Apodini"),
+                .product(name: "DeploymentTargetIoTRuntime", package: "ApodiniIoTDeploymentProvider"),
+                .target(name: "LifxIoTDeploymentOption"),
+                .target(name: "DuckieIoTDeploymentOption")
+            ]
+        )
     ]
 )

@@ -1,3 +1,11 @@
+#
+# This source file is part of the JASS open source project
+#
+# SPDX-FileCopyrightText: 2019-2021 Paul Schmiedmayer and the JASS project authors (see CONTRIBUTORS.md) <paul.schmiedmayer@tum.de>
+#
+# SPDX-License-Identifier: MIT
+#
+
 GREEN='\033[0;32m'
 DEFAULT='\033[0m'
 

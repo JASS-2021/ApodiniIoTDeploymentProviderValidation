@@ -11,14 +11,14 @@ The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C),
 
 ### General Setup
 
- 1. Boot all pis using [this image](https://github.com/fa21-collaborative-drone-interactions/BuoyAP). This should pre-configure access point, docker, etc.)
+ 1. Boot all pis using [this image](https://github.com/fa21-collaborative-drone-interactions/BuoyAP). (This should pre-configure access point, docker, etc.). This is used out of convenience to avoid setting up the WAP manually.
  2. Download and start avahi by:
-     I. sudo apt-get install avahi-utils avahi-daemon
-     II. edit /etc/avahi/avahi-daemon.conf
+    1. sudo apt-get install avahi-utils avahi-daemon
+    2. edit /etc/avahi/avahi-daemon.conf
          `publish-hinfo=yes`
          `publish-workstation=yes`
-    III. sudo systemctl enable avahi-daemon.service
-    IV. sudo systemctl start avahi-daemon.service
+    3. sudo systemctl enable avahi-daemon.service
+    4. sudo systemctl start avahi-daemon.service
     Alternatively you can also download and run [this script](https://github.com/Apodini/ApodiniIoTDeploymentProvider/blob/develop/scripts/setup-IoT.sh)
 3. Enable keyless ssh login by running: 
     `ssh-copy-id username@ipaddress`
