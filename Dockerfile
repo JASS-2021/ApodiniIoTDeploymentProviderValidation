@@ -9,9 +9,9 @@
 # ================================
 # Build image
 # ================================
-# FROM hendesi/master-thesis:offical-swift-arm as build
-FROM swiftlang/swift:nightly-focal as build
+# FROM swiftlang/swift:nightly-focal as build
 # FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b9feb4d8903fe1b54ea as build
+FROM ghcr.io/apodini/swift:nightly as build
 
 # Install OS updates and, if needed, sqlite3
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
@@ -27,15 +27,15 @@ WORKDIR /build
 COPY . .
 
 # Build everything, with optimizations and test discovery and
-RUN swift build
+RUN swift build -c release
 
 WORKDIR /staging
 
-RUN cp "$(swift build --package-path /build --show-bin-path)/DemoWebService" ./
+RUN cp "$(swift build --package-path /build -c release --show-bin-path)/DemoWebService" ./
 
-# FROM hendesi/master-thesis:offical-swift-arm
 # FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b9feb4d8903fe1b54ea as run
-FROM swiftlang/swift:nightly-focal as run
+# FROM swiftlang/swift:nightly-focal as run
+FROM ghcr.io/apodini/swift:nightly as run
 
 # Make sure all system packages are up to date.
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
