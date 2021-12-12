@@ -11,12 +11,10 @@ name: SwiftLint
 on:
   push:
     branches:
-      - develop
-      - release
+      - trunk
   pull_request:
     branches:
-      - develop
-      - release
+      - trunk
   workflow_dispatch:
 
 jobs:
