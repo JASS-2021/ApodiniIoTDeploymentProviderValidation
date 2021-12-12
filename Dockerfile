@@ -6,12 +6,16 @@
 #
 # SPDX-License-Identifier: MIT
 #
+
+ARG baseimage=swift:focal
+
 # ================================
 # Build image
 # ================================
 # FROM swiftlang/swift:nightly-focal as build
 # FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b9feb4d8903fe1b54ea as build
-FROM ghcr.io/apodini/swift:nightly as build
+# FROM ghcr.io/apodini/swift:nightly as build
+FROM ${baseimage} as build
 
 # Install OS updates and, if needed, sqlite3
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
@@ -33,9 +37,13 @@ WORKDIR /staging
 
 RUN cp "$(swift build --package-path /build -c release --show-bin-path)/DemoWebService" ./
 
+# ================================
+# Run image
+# ================================
+FROM ${baseimage}-slim as run
 # FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b9feb4d8903fe1b54ea as run
 # FROM swiftlang/swift:nightly-focal as run
-FROM ghcr.io/apodini/swift:nightly as run
+# FROM ghcr.io/apodini/swift:nightly as run
 
 # Make sure all system packages are up to date.
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
