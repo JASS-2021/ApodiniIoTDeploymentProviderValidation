@@ -14,8 +14,8 @@ The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C),
  - 2 LIFX lamps are to Pi A
  - 1 LIFX lamp are to Pi B 
  - 1 DuckieBot with Pi C (a DuckieBot consists of a Raspberry Pi: Pi C refers to this pi)
- 
- The web service that was used for the evaluation/deployment is the [ApodiniDemoWebService](https://github.com/Apodini/ApodiniDemoWebService).
+
+This repository contains also the web service that was used for the evaluation.
 
 ### General Setup
 
@@ -40,9 +40,7 @@ The DuckieBot represents a special case. Since the Raspberry Pi is integrated in
 On Pi C (i.e., the one of the DuckieBot), create an empty directory unter root: `/duckie-util`. The JassDeploymentProvider runs a post discovery action and looks for this folder. If found, the gateway is identified as a DuckieBot.
 
 ### Configure the Provider
-To allow a completely automatic, you can pass a credentials file that will hold the credentials for the docker images and the gateways. Please reach out to me for that and I will send it you privately, since some of the images are in my personal repo. 
-
-In `LifxDeployCommand.swift` file, the docker infos for the LIFX post discovery actions need to be manually updated with the correct credentials. I will send them to you as well and you need to adjust them manually in the code. 
+To allow a completely automatic, you can pass a credentials file that will hold the credentials for the docker images and the gateways. Since the docker images that are used are located in public repositories, no credentials are needed. There is a default credentials file in this repository, `credentials.json`, that fits to the used images and can be passed to the provider as shown below 
 
 ### Run the Provider
 Clone the repo and go into the provider directory. Build the provider using `swift build`. Make sure that the machine on which you run the provider is in the same network as the Raspberry Pis. You can now either:
