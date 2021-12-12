@@ -35,6 +35,7 @@ struct LifxDeployCommand: ParsableCommand {
     var credentialFilePath: String
     
     func run() throws {
+        print(FileManager.projectDirectory)
         let provider = IoTDeploymentProvider(
             searchableTypes: deploymentOptions.types.split(separator: ",").map { DeviceIdentifier(String($0)) },
             deploymentDir: deploymentOptions.deploymentDir,
@@ -43,8 +44,8 @@ struct LifxDeployCommand: ParsableCommand {
                 IoTContext.deploymentDirectory: deploymentOptions.deploymentDir
             ],
             webServiceArguments: webServiceArguments,
-            input: .dockerImage("hendesi/master-thesis:latest-arm64"),
-            configurationFile: URL(fileURLWithPath: credentialFilePath),
+            input: .dockerImage("ghcr.io/jass2021/jass2021-webservice"),
+            configurationFile: FileManager.projectDirectory.appendingPathComponent("credentials.json"),
             dumpLog: deploymentOptions.dumpLog,
             redeploymentInterval: TimeInterval(deploymentOptions.redeploymentInterval)
         )
@@ -54,7 +55,7 @@ struct LifxDeployCommand: ParsableCommand {
                 .docker(
                     DockerDiscoveryAction(
                         identifier: ActionIdentifier("docker_lifx"),
-                        imageName: "hendesi/master-thesis:lifx-action",
+                        imageName: "ghcr.io/apodini/swift-nio-lifx-impl:latest",
                         fileUrl: URL(fileURLWithPath: deploymentOptions.deploymentDir)
                             .appendingPathComponent("lifx_devices"),
                         options: [
@@ -62,7 +63,7 @@ struct LifxDeployCommand: ParsableCommand {
                             .volume(hostDir: deploymentOptions.deploymentDir, containerDir: "/app/tmp"),
                             .network("host"),
                             .command("/app/tmp --number-only"),
-                            .credentials(username: "dummyUsername", password: "password")
+                            .credentials(username: "", password: "")
                         ]
                     )
                 ),
