@@ -44,7 +44,7 @@ struct LifxDeployCommand: ParsableCommand {
                 IoTContext.deploymentDirectory: deploymentOptions.deploymentDir
             ],
             webServiceArguments: webServiceArguments,
-            input: .dockerImage("ghcr.io/jass2021/jass2021-webservice"),
+            input: .dockerImage("ghcr.io/jass-2021/jass2021-webservice:latest"),
             configurationFile: FileManager.projectDirectory.appendingPathComponent("credentials.json"),
             dumpLog: deploymentOptions.dumpLog,
             redeploymentInterval: TimeInterval(deploymentOptions.redeploymentInterval)
@@ -55,7 +55,7 @@ struct LifxDeployCommand: ParsableCommand {
                 .docker(
                     DockerDiscoveryAction(
                         identifier: ActionIdentifier("docker_lifx"),
-                        imageName: "ghcr.io/apodini/swift-nio-lifx-impl:latest",
+                        imageName: "gghcr.io/jass-2021/lifx-post-discovery-action:latest",
                         fileUrl: URL(fileURLWithPath: deploymentOptions.deploymentDir)
                             .appendingPathComponent("lifx_devices"),
                         options: [
