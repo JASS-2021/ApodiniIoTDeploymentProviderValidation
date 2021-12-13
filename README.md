@@ -21,12 +21,12 @@ This repository contains also the web service that was used for the evaluation.
 
  1. Boot all pis using [this image](https://github.com/fa21-collaborative-drone-interactions/BuoyAP). (This should pre-configure access point, docker, etc.). This is used out of convenience to avoid setting up the WAP manually.
  2. Download and start avahi by:
-    1. sudo apt-get install avahi-utils avahi-daemon
-    2. edit /etc/avahi/avahi-daemon.conf
+    1. `sudo apt-get install avahi-utils avahi-daemon`
+    2. `edit /etc/avahi/avahi-daemon.conf`
          `publish-hinfo=yes`
          `publish-workstation=yes`
-    3. sudo systemctl enable avahi-daemon.service
-    4. sudo systemctl start avahi-daemon.service
+    3. `sudo systemctl enable avahi-daemon.service`
+    4. `sudo systemctl start avahi-daemon.service`
     Alternatively you can also download and run [this script](https://github.com/Apodini/ApodiniIoTDeploymentProvider/blob/develop/scripts/setup-IoT.sh)
 3. Enable keyless ssh login by running: 
     `ssh-copy-id username@ipaddress`
@@ -44,8 +44,8 @@ To allow a completely automatic, you can pass a credentials file that will hold 
 
 ### Run the Provider
 Clone the repo and go into the provider directory. Build the provider using `swift build`. Make sure that the machine on which you run the provider is in the same network as the Raspberry Pis. You can now either:
-1. Run the provider once using `swift run LifxDuckieIoTDeploymentTarget --credential-file-path PATH_TO_FILE`
-2. Run the evaluation script (runs the provider 10 times with redownloading docker images and 10 times without redownloading, takes quite a long time) by running: `./jass_simulation.sh PATH_TO_CREDENTIAL_FILE`.
+1. Run the provider once using `swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json`
+2. Run the evaluation script (runs the provider 10 times with redownloading docker images and 10 times without redownloading, takes quite a long time) by running: `./jass_simulation.sh credentials.json` 
 Running the evaluation script, dumps the logs automatically. If you want to enable this manually set `--dump-log`. 
 
 To generate plots of the logs, use `evaluation_processing.py` it takes two paths to directories. The first should contain the logs of the initial deployment (i.e., redownloading images), the second contains logs of the recurring deployment.
