@@ -55,7 +55,7 @@ struct LifxDeployCommand: ParsableCommand {
                 .docker(
                     DockerDiscoveryAction(
                         identifier: ActionIdentifier("docker_lifx"),
-                        imageName: "gghcr.io/jass-2021/lifx-post-discovery-action:latest",
+                        imageName: "ghcr.io/jass-2021/lifx-post-discovery-action:latest",
                         fileUrl: URL(fileURLWithPath: deploymentOptions.deploymentDir)
                             .appendingPathComponent("lifx_devices"),
                         options: [
