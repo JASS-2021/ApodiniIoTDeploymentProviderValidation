@@ -12,7 +12,7 @@
 # ================================
 # Build image
 # ================================
-FROM swiftlang/swift:nightly-focal as run
+FROM swiftlang/swift:nightly-focal as build
 # FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b9feb4d8903fe1b54ea as build
 # FROM ghcr.io/apodini/swift:nightly as build
 # FROM ${baseimage} as build
