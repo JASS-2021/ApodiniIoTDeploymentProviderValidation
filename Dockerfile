@@ -21,7 +21,7 @@ FROM ghcr.io/apodini/swift@sha256:53b4295f95dc1eafcbc2e03c5dee41839e9652ca31397b
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
     && apt-get -q update \
     && apt-get -q dist-upgrade -y \
-    && apt-get install -y libsqlite3-dev libavahi-compat-libdnssd-dev \
+    && apt-get install -y libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up a build area
