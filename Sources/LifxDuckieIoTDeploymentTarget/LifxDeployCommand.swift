@@ -38,14 +38,10 @@ struct LifxDeployCommand: ParsableCommand {
         print(FileManager.projectDirectory)
         let provider = IoTDeploymentProvider(
             searchableTypes: deploymentOptions.types.split(separator: ",").map { DeviceIdentifier(String($0)) },
-            deploymentDir: deploymentOptions.deploymentDir,
-            automaticRedeployment: deploymentOptions.automaticRedeploy,
-            additionalConfiguration: [
-                IoTContext.deploymentDirectory: deploymentOptions.deploymentDir
-            ],
+            automaticRedeployment: false,
             webServiceArguments: webServiceArguments,
             input: .dockerImage("ghcr.io/jass-2021/jass2021-webservice:latest"),
-            configurationFile: FileManager.projectDirectory.appendingPathComponent("credentials.json"),
+            configurationFile: URL(fileURLWithPath: credentialFilePath),
             dumpLog: deploymentOptions.dumpLog,
             redeploymentInterval: TimeInterval(deploymentOptions.redeploymentInterval)
         )
