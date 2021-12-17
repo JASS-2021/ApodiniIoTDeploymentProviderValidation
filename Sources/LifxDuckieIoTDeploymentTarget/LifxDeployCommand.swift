@@ -10,7 +10,7 @@ import ArgumentParser
 import DeploymentTargetIoTCommon
 import DeploymentTargetIoT
 import DeviceDiscovery
-import DuckiePostDiscoveryAction
+import NIO
 import LifxIoTDeploymentOption
 import DuckieIoTDeploymentOption
 import Foundation
@@ -67,5 +67,28 @@ struct LifxDeployCommand: ParsableCommand {
         )
         provider.registerAction(scope: .all, action: .action(DuckiePostDiscoveryAction.self), option: DeploymentDeviceMetadata(.duckie))
         try provider.run()
+    }
+}
+
+public struct DuckiePostDiscoveryAction: PostDiscoveryAction {
+    public static var identifier: ActionIdentifier {
+        ActionIdentifier("duckie-post-discovery")
+    }
+    
+    public init() {}
+    
+    public func run(_ device: Device, on eventLoopGroup: EventLoopGroup, client: SSHClient?) throws -> EventLoopFuture<Int> {
+        let eventLoop = eventLoopGroup.next()
+        
+        guard let client = client else {
+            return eventLoop.makeSucceededFuture(0)
+        }
+        try client.bootstrap()
+        
+        if try client.executeAsBool(cmd: "cd /duckie-util", responseHandler: nil) {
+            return eventLoop.makeSucceededFuture(1)
+        } else {
+            return eventLoop.makeSucceededFuture(0)
+        }
     }
 }

@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Apodini
 import ApodiniDeployBuildSupport
 import DeploymentTargetIoTCommon
 import Foundation

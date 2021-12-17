@@ -47,7 +47,7 @@ let package = Package(
                 .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider"),
                 .target(name: "LifxIoTDeploymentOption"),
                 .target(name: "DuckieIoTDeploymentOption"),
-                .target(name: "DuckiePostDiscoveryAction"),
+//                .target(name: "DuckiePostDiscoveryAction"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]
         ),
