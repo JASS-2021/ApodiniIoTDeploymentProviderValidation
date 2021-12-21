@@ -13,8 +13,9 @@ This repository contains the setup and evaluation scripts for the automatic web 
 ## Setup
 The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C).
  - 2 LIFX lamps are connected to Raspberry Pi A
- - 1 LIFX lamp is connected to Raspberry Pi A
- - 1 [DuckieBot]() with Pi C
+ - 1 LIFX lamp is connected to Raspberry Pi B
+ - 1 [DuckieBot](https://www.duckietown.org) with Pi C
+All Raspberry Pis must be located in a network connected via Ethernet as the WiFi module is used for creating access points.
 
 ### Raspberry Pi Setup
 
@@ -28,25 +29,32 @@ The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C).
 
 ### LIFX Lamps Setup
 When the Raspberry Pis reboot, the access point is automatically started.
-To connect the lamps to the access points, connect your mobile phone to the access point and use the [LIFX app](https://www.lifx.com/pages/app) to set up the lamps for each Raspberry Pi subnet.
+To connect the lamps to the access points, connect your mobile phone to the access point and use the [LIFX app](https://www.lifx.com/pages/app) to set up the lamps for each Raspberry Pi subnet. On iOS you can use the settings app to directly connect the LIFX lamps to the WiFi networks without any dedicated app.
 
-### Specific Setup for the DuckieBot
+### DuckieBot Setup
 Since the Raspberry Pi on the DuckieBot is integrated into the DuckieBot, it does not have IoT devices connected to it that would allow us to identify it as a DuckieBot.
 The JASS 2021 Deployment Provider uses an empty directory at the root directory named `duckie-util`: `/duckie-util`.
 The JassDeploymentProvider runs a post-discovery action and tries to find this folder. If found, the gateway is identified as a DuckieBot.
 
-## Configure the Provider
-To allow a completely automatic, you can pass a credentials file that will hold the credentials for the docker images and the Raspberry Pi based IoT gateways.
-The docker images used in the JASS 2021 IoT Deployment providers are public docker images hosted in the GitHub Package Registry. Therefore no docker credentials are needed.
-There is a default credentials file in this repository, `credentials.json`, that can be passed to the provider as as shown in the next section.
+## Run the JASS 2021 IoT Deployment Provider
 
-## Run the JASS 2021 IoT Deployment Porovider
-Clone the repo and go into the provider directory. Build the provider using `swift build`. Make sure that the machine on which you run the provider is in the same network as the Raspberry Pis. You can now either:
+The JASS 2021 IoT Deployment Provider is based on the [Apodini IoT Deployment Provider](https://github.com/Apodini/ApodiniIoTDeploymentProvider). The source code and the relevant web service is in this repository. The JASS 2021 IoT Deployment Provider uses the [LIFX Post Discovery Action](https://github.com/JASS-2021/LIFXPostDiscoveryAction) located in this GitHub organization to discover LIFX-based smart lights.
+
+### Configure the JASS 2021 IoT Deployment Provider
+To allow a non-interactive setup, you can pass a credentials file that will hold the credentials for the docker images and the Raspberry Pi-based IoT gateways.
+The docker images used in the JASS 2021 IoT Deployment providers are public docker images hosted in the GitHub Package Registry. Therefore no docker credentials are needed.
+This repository contains a default credentials file in this repository, `credentials.json`, that can be passed to the provider as shown in the next section.
+
+### Start the JASS 2021 IoT Deployment Provider
+Build the provider using `swift build`. 
+
+The machine executing the JASS 2021 IoT Deployment Provider must be in the same network as the RaspberryPis.
+You can now either:
 1. Run the provider once using `swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json`
 2. Run the evaluation script (runs the provider 10 times with redownloading docker images and 10 times without redownloading, takes quite a long time) by running: `./jass_simulation.sh credentials.json` 
-Running the evaluation script, dumps the logs automatically. If you want to enable this manually set `--dump-log`. 
+Running the evaluation script dumps the logs automatically. If you want to enable this, manually set `--dump-log`. 
 
-To generate plots of the logs, use `evaluation_processing.py` it takes two paths to directories. The first should contain the logs of the initial deployment (i.e., redownloading images), the second contains logs of the recurring deployment.
+To generate plots of the logs, use `evaluation_processing.py` . The script requires two arguments pointing to directories. The first directory should contain the logs of the initial deployment (i.e., redownloading images), the second directory must contain the logs of the recurring deployment.
 
 ## Contributing
 Contributions to this project are welcome. Please make sure to read the [contribution guidelines](https://github.com/Apodini/.github/blob/main/CONTRIBUTING.md) first.

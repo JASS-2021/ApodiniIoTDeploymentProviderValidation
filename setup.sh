@@ -7,25 +7,6 @@ export NEEDRESTART_MODE=a
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y update
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
 
-# Install Docker
-
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install ca-certificates curl gnupg lsb-release
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo DEBIAN_FRONTEND=noninteractive gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y update
-sudo DEBIAN_FRONTEND=noninteractive apt-get -y install docker-ce docker-ce-cli containerd.io
-
-sudo groupadd docker
-sudo usermod -aG docker $USER
-docker --version
-
-sudo systemctl enable docker.service
-sudo systemctl enable containerd.service
-
-rm get-docker.sh
-
 # Access point setup based on the instructions found at https://www.raspberrypi.com/documentation/computers/configuration.html#setting-up-a-routed-wireless-access-point
 
 printf "DNSStubListener=no" | sudo tee -a /etc/systemd/resolved.conf
@@ -62,6 +43,16 @@ network:
             addresses:
             - 192.168.4.1/24" | sudo tee /etc/netplan/50-cloud-init.yaml
 
+printf "127.0.0.1 localhost
+127.0.1.1 ubuntu RaspberryPi$RASPBERRYPILETTER
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters" | sudo tee /etc/hostname
+
 sudo systemctl reload dnsmasq
 
 ## hostapd
@@ -97,6 +88,24 @@ sudo sed -i "s/^publish-workstation=.*/publish-workstation=yes/" /etc/avahi/avah
 
 sudo systemctl enable avahi-daemon.service
 sudo systemctl start avahi-daemon.service
+
+# Install Docker
+
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install linux-modules-extra-raspi ca-certificates curl gnupg lsb-release
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo DEBIAN_FRONTEND=noninteractive gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install docker-ce docker-ce-cli containerd.io
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+docker --version
+
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
 
 # Reboot
 
