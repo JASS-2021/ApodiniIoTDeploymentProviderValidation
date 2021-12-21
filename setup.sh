@@ -1,3 +1,11 @@
+#
+# This source file is part of the JASS 2021 open source project
+#
+# SPDX-FileCopyrightText: 2019-2021 Paul Schmiedmayer and the JASS 2021 project authors (see CONTRIBUTORS.md) <paul.schmiedmayer@tum.de>
+#
+# SPDX-License-Identifier: MIT
+#
+
 RASPBERRYPILETTER="${1:-A}"
 WIFIPASSWORD="${2:-RaspberryPi$RASPBERRYPILETTER}"
 
