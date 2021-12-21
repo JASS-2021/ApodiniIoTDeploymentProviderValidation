@@ -68,7 +68,7 @@ jobs:
             baseimage=swift:focal
           push: true
           tags: ghcr.io/jass-2021/jass2021-webservice:latest-amd64,ghcr.io/jass-2021/jass2021-webservice:${{ steps.latesttag.outputs.tag }}-amd64
- dockermanifest:
+  dockermanifest:
     needs: [dockerARM64, dockerAMD64]
     name: Create Multi-CPU Architecture Image
     runs-on: ubuntu-latest
