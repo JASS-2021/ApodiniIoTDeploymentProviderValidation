@@ -8,6 +8,8 @@ SPDX-License-Identifier: MIT
 
 # Jass Deployment Provider Evaluation
 
+[![Build and Test](https://github.com/JASS-2021/JassDeploymentProviderValidation/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/JASS-2021/JassDeploymentProviderValidation/actions/workflows/build-and-test.yml)
+
 This repository contains the setup and evaluation scripts for the automatic web service deployment using the Apodini IoT Deployment Provider that was used for the JASS 2021.
 
 ## Setup
