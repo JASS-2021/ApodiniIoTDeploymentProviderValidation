@@ -6,43 +6,41 @@ SPDX-FileCopyrightText: 2019-2021 Paul Schmiedmayer and the JASS project authors
 SPDX-License-Identifier: MIT
 -->
 
-# Jass Deployment Provider - Evaluation
+# Jass Deployment Provider Evaluation
+
+This repository contains the setup and evaluation scripts for the automatic web service deployment using the Apodini IoT Deployment Provider that was used for the JASS 2021.
 
 ## Setup
-The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C), to which are 3 LIFX lamps and 1 DuckieBot connected such that:
+The evaluation has been conducted with a total of **3** Raspberry Pis (A, B, C).
+ - 2 LIFX lamps are connected to Raspberry Pi A
+ - 1 LIFX lamp is connected to Raspberry Pi A
+ - 1 [DuckieBot]() with Pi C
 
- - 2 LIFX lamps are to Pi A
- - 1 LIFX lamp are to Pi B 
- - 1 DuckieBot with Pi C (a DuckieBot consists of a Raspberry Pi: Pi C refers to this pi)
+### Raspberry Pi Setup
 
-This repository contains also the web service that was used for the evaluation.
+1. Use an Imager such as the [https://www.raspberrypi.com/software/](Raspberry Pi Imager) to flash an [Ubuntu Server 21.10 64-bit](https://ubuntu.com/raspberry-pi/server) on an SD card.
+2. Start the Raspberry Pi with the SD card, connect to the Raspberry Pi using SSH, and change the default password.
+3. Run `ssh-copy-id username@ipaddress` with the username (probably ubuntu) and the IP address of your Raspberry Pi on your machine to enable a more straightforward keyless ssh login.
+4. SSH into the Raspberry Pi, clone this repository or copy the script to the Raspberry Pi using `scp` and run the `setup.sh` script to set up the wireless access point, docker installation, and avahi. The Raspberry Pi restarts after the script is complete. 
+ - Pass the letter of the Raspberry Pi to the setup script (the default value is `A`), e.g.: `setup.sh B`. 
+ - You can also modify the WiFi password as a second argument: `setup.sh B SuperSecretPassword`.
+5. Check that the wireless access point is running. It corresponds to the letter of the RapsberryPi instance, e.g. `RaspberryPiA`, and the password is set the same as the access point name if you have not set a separate password.
 
-### General Setup
-
- 1. Boot all pis using [this image](https://github.com/fa21-collaborative-drone-interactions/BuoyAP). (This should pre-configure access point, docker, etc.). This is used out of convenience to avoid setting up the WAP manually.
- 2. Download and start avahi by:
-    1. `sudo apt-get install avahi-utils avahi-daemon`
-    2. `edit /etc/avahi/avahi-daemon.conf`
-         `publish-hinfo=yes`
-         `publish-workstation=yes`
-    3. `sudo systemctl enable avahi-daemon.service`
-    4. `sudo systemctl start avahi-daemon.service`
-    Alternatively you can also download and run [this script](https://github.com/Apodini/ApodiniIoTDeploymentProvider/blob/develop/scripts/setup-IoT.sh)
-3. Enable keyless ssh login by running: 
-    `ssh-copy-id username@ipaddress`
-4. (Optional) In my tests I sometimes had the issue that the free space was always around 7-8gb even with bigger sd cards. If you notice something similar, I can recommend [this guide]
-
-### Specific Setup for the LIFX Pis
-When booting the pis with the aforementioned image, the pis automatically open an access point. To connect the lamps to them, I connected to the access point with my mobile phone and used the LIFX app to setup the lamps for each sub net. The image also automatically run a docker container on startup, so might want to stop&remove that before running the provider. 
+### LIFX Lamps Setup
+When the Raspberry Pis reboot, the access point is automatically started.
+To connect the lamps to the access points, connect your mobile phone to the access point and use the [LIFX app](https://www.lifx.com/pages/app) to set up the lamps for each Raspberry Pi subnet.
 
 ### Specific Setup for the DuckieBot
-The DuckieBot represents a special case. Since the Raspberry Pi is integrated into the DuckieBot, it does not have IoT devices connected to it that would allow us to identify it as a DuckieBot. Therefore, we need a small workaround.
-On Pi C (i.e., the one of the DuckieBot), create an empty directory unter root: `/duckie-util`. The JassDeploymentProvider runs a post discovery action and looks for this folder. If found, the gateway is identified as a DuckieBot.
+Since the Raspberry Pi on the DuckieBot is integrated into the DuckieBot, it does not have IoT devices connected to it that would allow us to identify it as a DuckieBot.
+The JASS 2021 Deployment Provider uses an empty directory at the root directory named `duckie-util`: `/duckie-util`.
+The JassDeploymentProvider runs a post-discovery action and tries to find this folder. If found, the gateway is identified as a DuckieBot.
 
-### Configure the Provider
-To allow a completely automatic, you can pass a credentials file that will hold the credentials for the docker images and the gateways. Since the docker images that are used are located in public repositories, no credentials are needed. There is a default credentials file in this repository, `credentials.json`, that fits to the used images and can be passed to the provider as shown below 
+## Configure the Provider
+To allow a completely automatic, you can pass a credentials file that will hold the credentials for the docker images and the Raspberry Pi based IoT gateways.
+The docker images used in the JASS 2021 IoT Deployment providers are public docker images hosted in the GitHub Package Registry. Therefore no docker credentials are needed.
+There is a default credentials file in this repository, `credentials.json`, that can be passed to the provider as as shown in the next section.
 
-### Run the Provider
+## Run the JASS 2021 IoT Deployment Porovider
 Clone the repo and go into the provider directory. Build the provider using `swift build`. Make sure that the machine on which you run the provider is in the same network as the Raspberry Pis. You can now either:
 1. Run the provider once using `swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json`
 2. Run the evaluation script (runs the provider 10 times with redownloading docker images and 10 times without redownloading, takes quite a long time) by running: `./jass_simulation.sh credentials.json` 
@@ -50,6 +48,11 @@ Running the evaluation script, dumps the logs automatically. If you want to enab
 
 To generate plots of the logs, use `evaluation_processing.py` it takes two paths to directories. The first should contain the logs of the initial deployment (i.e., redownloading images), the second contains logs of the recurring deployment.
 
-## Last Remarks
-I hope this clarifies setup and usage of the provider. If you encounter any problems or run into some issues, feel free to reach out to me.
+## Contributing
+Contributions to this project are welcome. Please make sure to read the [contribution guidelines](https://github.com/Apodini/.github/blob/main/CONTRIBUTING.md) first.
 
+## License
+This project is licensed under the MIT License. See [License](https://github.com/Apodini/Apodini/blob/reuse/LICENSES/MIT.txt) for more information.
+
+## Code of conduct
+For our code of conduct see [Code of conduct](https://github.com/Apodini/.github/blob/main/CODE_OF_CONDUCT.md).
