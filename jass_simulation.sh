@@ -9,9 +9,11 @@
 GREEN='\033[0;32m'
 DEFAULT='\033[0m'
 
-EXEC_PATH=".build/debug/LifxDuckieIoTDeploymentTarget --credential-file-path $1 --dump-log"
-
-ipAddresses=( "192.168.2.120" "192.168.2.115" "192.168.2.117" )
+# You can pass the addresses to the script as arguments
+IP1="${1:-192.168.178.50}"
+IP2="${2:-192.168.178.51}"
+IP3="${3:-192.168.178.52}"
+ipAddresses=( "$IP1" "$IP2" "$IP3" )
 
 function reset() {
     for ipAddress in "${ipAddresses[@]}"; do
@@ -29,14 +31,15 @@ function stop() {
 function testDuckieDeployment() {
     echo "Testing if duckie deployment was successful"
     
-    # Test 192.168.2.120 - should have duckie & common endpoints
-    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.120:8080/v1/lifx)
-    shouldSucceedCall1=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.120:8080/v1/duckie)
-    shouldSucceedCall2=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.120:8080/v1/common)
+    # C should have duckie & common endpoints
+    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[2]}:8080/v1/lifx)
+    shouldSucceedCall1=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[2]}:8080/v1/duckie)
+    shouldSucceedCall2=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[2]}:8080/v1/common)
     
     if [ $shouldSucceedCall1 -eq 200 ] && [ $shouldSucceedCall2 -eq 200 ] && [ $shouldFailcall -ne 200 ]; then
-        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Duckie Deployment was successful"
+        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Duckie Deployment Test was successful"
     else
+        echo "${RED} Duckie Deployment Test failed!${DEFAULT}"
         exit 1
     fi
 }
@@ -45,28 +48,30 @@ function testLifxDeployment() {
     echo "Testing if lifx deployment was successful"
     errorOccurred=false
     
-    # Test 192.168.2.115 - should have lifx & common endpoints
-    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.115:8080/v1/duckie)
-    shouldSucceedCall=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.115:8080/v1/lifx &&
-            curl -s -o /dev/null -w "%{http_code}" 192.168.2.115:8080/v1/common)
-    if [ $shouldSucceedCall -ne 200 ] && [ $shouldFailcall -eq 200 ]; then
+    # A should have lifx & common endpoints
+    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[0]}:8080/v1/duckie)
+    shouldSucceedCall1=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[0]}:8080/v1/lifx)
+    shouldSucceedCall2=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[0]}:8080/v1/common)
+    if [ $shouldSucceedCall1 -eq 200 ] && [ $shouldSucceedCall2 -eq 200 ] && [ $shouldFailcall -ne 200 ]; then
+        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: LIFX Deployment for Rapsberry Pi A was successful"
+    else
         errorOccurred=true
-        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Duckie Deployment was successful"
     fi
     
-    # Test 192.168.2.117 - should have lifx & common endpoints
-    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.117:8080/v1/duckie)
-    shouldSucceedCall=$(curl -s -o /dev/null -w "%{http_code}" 192.168.2.117:8080/v1/lifx &&
-            curl -s -o /dev/null -w "%{http_code}" 192.168.2.117:8080/v1/common)
-    if [ $shouldSucceedCall -ne 200 ] && [ $shouldFailcall -eq 200 ]; then
+    # B should have lifx & common endpoints
+    shouldFailcall=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[1]}:8080/v1/duckie)
+    shouldSucceedCall1=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[1]}:8080/v1/lifx)
+    shouldSucceedCall2=$(curl -s -o /dev/null -w "%{http_code}" ${ipAddresses[1]}:8080/v1/common)
+    if [ $shouldSucceedCall1 -eq 200 ] && [ $shouldSucceedCall2 -eq 200 ] && [ $shouldFailcall -ne 200 ]; then
+        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: LIFX Deployment for Rapsberry Pi B was successful"
+    else
         errorOccurred=true
-        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Duckie Deployment was successful"
     fi
     
     if [ "$errorOccurred" = false ]; then
-        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Deployment Test was successful"
+        echo "${GREEN}\xE2\x9C\x94 SUCCESS${DEFAULT}: Both LIFX Deployment Test were successful"
     else
-        echo "${RED}Deployment Test failed!${DEFAULT}"
+        echo "${RED} LIFX Deployment Test failed!${DEFAULT}"
         exit 1
     fi
 }
@@ -74,18 +79,18 @@ function testLifxDeployment() {
 echo "Testing initial deployment. Downloading images only on first run"
 for ((i=1;i<=10;i++)); do
     reset
-    ./$EXEC_PATH
+    swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json
     testLifxDeployment
     testDuckieDeployment
 done
 
-sleep 300
+sleep 15
 
 echo "Testing without docker reset. Assuming needed images are already downloaded"
 
 for ((i=1;i<=10;i++)); do
     stop
-    ./$EXEC_PATH
+    swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json
     testLifxDeployment
     testDuckieDeployment
 done
