@@ -16,7 +16,6 @@ let package = Package(
         .macOS(.v12)
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .executable(
             name: "LifxDuckieIoTDeploymentTarget",
             targets: ["LifxDuckieIoTDeploymentTarget"]
@@ -36,7 +35,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.6.1")),
-        .package(name: "ApodiniIoTDeploymentProvider", url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git", .upToNextMinor(from: "0.1.0")),
+        .package(url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git",.upToNextMinor(from: "0.1.3")),
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
