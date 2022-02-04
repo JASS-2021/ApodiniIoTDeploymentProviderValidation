@@ -10,15 +10,16 @@
 
 import PackageDescription
 
+
 let package = Package(
-    name: "JassDeploymentProvider",
+    name: "JASS2021IoTDeploymentProvider",
     platforms: [
         .macOS(.v12)
     ],
     products: [
         .executable(
-            name: "LifxDuckieIoTDeploymentTarget",
-            targets: ["LifxDuckieIoTDeploymentTarget"]
+            name: "JASS2021IoTDeploymentProvider",
+            targets: ["JASS2021IoTDeploymentProvider"]
         ),
         .library(
             name: "LifxIoTDeploymentOption",
@@ -29,21 +30,21 @@ let package = Package(
             targets: ["DuckieIoTDeploymentOption"]
         ),
         .executable(
-            name: "DemoWebService",
+            name: "WebService",
             targets: ["WebService"]
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/Apodini/Apodini.git", .upToNextMinor(from: "0.6.1")),
-        .package(url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git",.upToNextMinor(from: "0.1.3")),
+        .package(url: "https://github.com/Apodini/Apodini.git", .branch("develop")),
+        .package(url: "https://github.com/Apodini/ApodiniIoTDeploymentProvider.git", .branch("feature/apodiniDeployer")),
         .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
         .executableTarget(
-            name: "LifxDuckieIoTDeploymentTarget",
+            name: "JASS2021IoTDeploymentProvider",
             dependencies: [
-                .product(name: "DeploymentTargetIoT", package: "ApodiniIoTDeploymentProvider"),
-                .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider"),
+                .product(name: "IoTDeploymentProvider", package: "ApodiniIoTDeploymentProvider"),
+                .product(name: "IoTDeploymentProviderCommon", package: "ApodiniIoTDeploymentProvider"),
                 .target(name: "LifxIoTDeploymentOption"),
                 .target(name: "DuckieIoTDeploymentOption"),
                 .target(name: "DuckiePostDiscoveryAction"),
@@ -53,19 +54,19 @@ let package = Package(
         .target(
             name: "LifxIoTDeploymentOption",
             dependencies: [
-                .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider")
+                .product(name: "IoTDeploymentProviderCommon", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
         .target(
             name: "DuckieIoTDeploymentOption",
             dependencies: [
-                .product(name: "DeploymentTargetIoTCommon", package: "ApodiniIoTDeploymentProvider")
+                .product(name: "IoTDeploymentProviderCommon", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
         .target(
             name: "DuckiePostDiscoveryAction",
             dependencies: [
-                .product(name: "DeploymentTargetIoT", package: "ApodiniIoTDeploymentProvider")
+                .product(name: "IoTDeploymentProvider", package: "ApodiniIoTDeploymentProvider")
             ]
         ),
         .executableTarget(
@@ -74,8 +75,8 @@ let package = Package(
                 .product(name: "Apodini", package: "Apodini"),
                 .product(name: "ApodiniREST", package: "Apodini"),
                 .product(name: "ApodiniOpenAPI", package: "Apodini"),
-                .product(name: "ApodiniDeploy", package: "Apodini"),
-                .product(name: "DeploymentTargetIoTRuntime", package: "ApodiniIoTDeploymentProvider"),
+                .product(name: "ApodiniDeployer", package: "Apodini"),
+                .product(name: "IoTDeploymentProviderRuntime", package: "ApodiniIoTDeploymentProvider"),
                 .target(name: "LifxIoTDeploymentOption"),
                 .target(name: "DuckieIoTDeploymentOption")
             ]

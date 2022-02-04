@@ -7,15 +7,16 @@
 //
 
 import ArgumentParser
-import DeploymentTargetIoTCommon
-import DeploymentTargetIoT
+import IoTDeploymentProviderCommon
+import IoTDeploymentProvider
 import DeviceDiscovery
 import DuckiePostDiscoveryAction
 import LifxIoTDeploymentOption
 import DuckieIoTDeploymentOption
 import Foundation
 
-struct LifxDeployCommand: ParsableCommand {
+
+struct JASS2021IoTDeploymentProviderCommand: ParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
             commandName: "deploy",
@@ -38,7 +39,7 @@ struct LifxDeployCommand: ParsableCommand {
         print(FileManager.projectDirectory)
         let provider = IoTDeploymentProvider(
             searchableTypes: deploymentOptions.types.split(separator: ",").map { DeviceIdentifier(String($0)) },
-            automaticRedeployment: false,
+            automaticRedeployment: deploymentOptions.automaticRedeploy,
             webServiceArguments: webServiceArguments,
             input: .dockerImage("ghcr.io/jass-2021/jass2021-webservice:latest"),
             configurationFile: URL(fileURLWithPath: credentialFilePath),

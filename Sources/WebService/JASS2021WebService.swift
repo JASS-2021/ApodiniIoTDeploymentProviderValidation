@@ -9,24 +9,25 @@
 import Apodini
 import ApodiniREST
 import ApodiniOpenAPI
-import ApodiniDeploy
-import DeploymentTargetIoTRuntime
+import ApodiniDeployer
+import IoTDeploymentProviderRuntime
 import LifxIoTDeploymentOption
 import DuckieIoTDeploymentOption
 
+
 @main
-struct DemoWebService: WebService {
+struct JASS2021WebService: WebService {
     var content: some Component {
         Group("lifx") {
-            TextHandler("Displaying Lifx Content")
+            LIFXHandler()
         }.metadata(DeploymentDevice(.lifx))
         
         Group("duckie") {
-            TextHandler("Displaying Duckie Content")
+            DuckieBotHandler()
         }.metadata(DeploymentDevice(.duckie))
         
         Group("common") {
-            TextHandler("Displaying Common Content")
+            FogNodeStatusHandler()
         }.metadata(DeploymentDevice(.default))
     }
     
@@ -34,6 +35,6 @@ struct DemoWebService: WebService {
         REST {
             OpenAPI()
         }
-        ApodiniDeploy(runtimes: [IoTRuntime<Self>.self])
+        ApodiniDeployer(runtimes: [IoT.self])
     }
 }

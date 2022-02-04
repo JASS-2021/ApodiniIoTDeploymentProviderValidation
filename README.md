@@ -52,7 +52,7 @@ Build the provider using `swift build`.
 
 The machine executing the JASS 2021 IoT Deployment Provider must be in the same network as the RaspberryPis.
 You can now either:
-1. Run the provider once using `swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json`
+1. Run the provider once using `swift run JASS2021IoTDeploymentProvider --credential-file-path credentials.json`
 2. Run the evaluation script (runs the provider 10 times with redownloading docker images and 10 times without redownloading, takes quite a long time) by running: `./jass_simulation.sh IP_A IP_B IP_C`. Replace `IP_A`, `IP_B`, and `IP_C` with the IPs of the respective Raspberry Pis.
 Running the evaluation script dumps the logs automatically. If you want to enable this, manually set `--dump-log`. 
 

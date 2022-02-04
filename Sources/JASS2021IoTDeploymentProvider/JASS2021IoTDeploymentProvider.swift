@@ -7,17 +7,18 @@
 //  
 
 import ArgumentParser
-import DeploymentTargetIoT
+import IoTDeploymentProvider
+
 
 @main
-struct LifxIotDeploymentCLI: ParsableCommand {
+struct JASS2021IoTDeploymentProvider: ParsableCommand {
     static var configuration: CommandConfiguration {
         CommandConfiguration(
             abstract: "LIFX Deployment Provider",
             discussion: "Contains LIFX deployment related commands",
             version: "0.0.1",
-            subcommands: [LifxDeployCommand.self, KillSessionCommand.self],
-            defaultSubcommand: LifxDeployCommand.self
+            subcommands: [JASS2021IoTDeploymentProviderCommand.self, KillSessionCommand.self],
+            defaultSubcommand: JASS2021IoTDeploymentProviderCommand.self
         )
     }
 }

@@ -28,11 +28,11 @@ WORKDIR /build
 COPY . .
 
 # Build everything, with optimizations and test discovery and
-RUN swift build -c debug --product DemoWebService
+RUN swift build -c debug --product WebService
 
 WORKDIR /staging
 
-RUN cp "$(swift build --package-path /build -c debug --show-bin-path)/DemoWebService" ./
+RUN cp "$(swift build --package-path /build -c debug --show-bin-path)/WebService" ./
 
 # ================================
 # Run image
@@ -54,4 +54,4 @@ COPY --from=build --chown=apodini:apodini /staging /app
 
 USER apodini:apodini
 
-ENTRYPOINT ["./DemoWebService"]
+ENTRYPOINT ["./WebService"]

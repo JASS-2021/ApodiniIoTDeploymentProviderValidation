@@ -79,7 +79,7 @@ function testLifxDeployment() {
 echo "Testing initial deployment. Downloading images only on first run"
 for ((i=1;i<=10;i++)); do
     reset
-    swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json
+    swift run JASS2021IoTDeploymentProvider --credential-file-path credentials.json
     testLifxDeployment
     testDuckieDeployment
 done
@@ -90,7 +90,7 @@ echo "Testing without docker reset. Assuming needed images are already downloade
 
 for ((i=1;i<=10;i++)); do
     stop
-    swift run LifxDuckieIoTDeploymentTarget --credential-file-path credentials.json
+    swift run JASS2021IoTDeploymentProvider --credential-file-path credentials.json
     testLifxDeployment
     testDuckieDeployment
 done
